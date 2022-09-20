@@ -62,7 +62,7 @@ const HomePage = () => {
 
         if (searchParams.get('newuser') === 'true') {
             navigate('/')
-            // navigate(0)
+            navigate(0)
         }
 
         fetchArticles().then(r => console.log('Articles loaded'))

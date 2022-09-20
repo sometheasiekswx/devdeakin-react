@@ -32,7 +32,6 @@ const SignupPage = () => {
                 })
                 setSuccess('Successfully created account')
                 setTimeout(() => {
-                    // navigate(0)
                     navigate({
                         pathname: '/',
                         search: createSearchParams({
