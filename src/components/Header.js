@@ -1,4 +1,12 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+import { signOut } from 'firebase/auth'
+import { firebaseAuth, useFirebaseAuth } from '../firebase'
+
+import ErrorBox from './ErrorBox'
+import SuccessBox from './SuccessBox'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -14,15 +22,6 @@ import { alpha, styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
-
-import { Link, useNavigate } from 'react-router-dom'
-
-import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { firebaseAuth } from '../firebase'
-import { useFirebaseAuth } from "../firebase"
-
-import ErrorBox from './ErrorBox'
-import SuccessBox from './SuccessBox'
 
 
 const Search = styled('div')(({theme}) => ({
@@ -74,23 +73,6 @@ const Header = () => {
         setAnchorElNav(null)
         navigate(href)
     }
-
-    // const [user, setUser] = useState({})
-    // onAuthStateChanged(firebaseAuth, (u) => {
-    //     if (u && (user === null || user === undefined)) {
-    //         // User is signed in, see docs for a list of available properties
-    //         // https://firebase.google.com/docs/reference/js/firebase.User
-    //         const uid = u.uid
-    //         const displayName = u.displayName
-    //         const email = u.email
-    //         const photoURL = u.photoURL
-    //         const emailVerified = u.emailVerified
-    //
-    //         setUser({
-    //             uid: uid, displayName: displayName, email: email, photoURL: photoURL, emailVerified: emailVerified,
-    //         })
-    //     }
-    // })
 
     return (
         <>
@@ -241,7 +223,6 @@ const Header = () => {
                             }
                             {(user !== null && user !== undefined) && <Button
                                 onClick={() => signOut(firebaseAuth).then(() => {
-                                    // setUser({})
                                     setSuccess('Successfully logged out')
                                     setTimeout(() => {
                                         setSuccess('')

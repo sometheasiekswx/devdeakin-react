@@ -13,6 +13,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import { ArrowBack } from "@mui/icons-material";
 
 
 const QuestionPage = () => {
@@ -46,12 +47,12 @@ const QuestionPage = () => {
         }
 
         fetchData()
-    }, [])
+    }, [questionId])
 
     return (
         <Stack spacing={0} direction='column'
                justifyContent='center'
-               alignItems='center' >
+               alignItems='center'>
             <Box sx={{
                 backgroundColor: 'primary.main',
                 '&:hover': {
@@ -146,12 +147,17 @@ const QuestionPage = () => {
                                         <Grid container
                                               sx={{p: 2}}
                                               justifyContent='space-between'
-                                              alignItems='center' columnSpacing={4}>
-                                            <Grid item xs={6}>
-                                                <Button size={'large'} variant={'contained'} fullWidth>Edit</Button>
+                                              alignItems='center' gap={1}>
+                                            <Grid item xs={5}>
+                                                <Button size={'large'} variant={'contained'} fullWidth
+                                                        onClick={() => navigate(`/questions`)}
+                                                        startIcon={<ArrowBack/>}>Questions</Button>
                                             </Grid>
-                                            <Grid item xs={6}>
-                                                <Button size={'large'} variant={'contained'} color={'secondary'}
+                                            <Grid item xs={3}>
+                                                <Button size={'large'} variant={'outlined'} fullWidth>Edit</Button>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button size={'large'} variant={'outlined'} color={'secondary'}
                                                         onClick={async () => {
                                                             await deleteDoc(doc(firebaseDb, 'questions', question.id)).then(
                                                                 navigate(`/questions`)

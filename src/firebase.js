@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
-import { getAuth, onAuthStateChanged } from "firebase/auth"
-import { getFirestore } from "firebase/firestore"
-import { getStorage } from "firebase/storage"
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 
 
 const firebaseConfig = {
@@ -41,13 +41,13 @@ const FirebaseAuthProvider = ({children}) => {
 }
 
 function useFirebaseAuth() {
-    const context = useContext(FirebaseAuthContext);
+    const context = useContext(FirebaseAuthContext)
     if (context === undefined) {
         throw new Error(
-            "useFirebaseAuth must be used within a FirebaseAuthProvider"
-        );
+            'useFirebaseAuth must be used within a FirebaseAuthProvider'
+        )
     }
-    return context.user;
+    return context.user
 }
 
 export { FirebaseAuthProvider, useFirebaseAuth }

@@ -1,3 +1,4 @@
+import React from 'react'
 import Stack from '@mui/material/Stack'
 import notfound from '../images/404.jpg'
 import Typography from '@mui/material/Typography'

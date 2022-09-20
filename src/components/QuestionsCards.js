@@ -64,7 +64,7 @@ const QuestionsCards = (props) => {
             }
         }
         setDataFiltered(newData)
-    }, [search, data])
+    }, [search, data, filter])
 
     return (
         <Box sx={{

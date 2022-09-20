@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import Typography from "@mui/material/Typography";
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Parallax } from "react-parallax";
 import { TypeAnimation } from "react-type-animation";
@@ -15,6 +11,11 @@ import alteredCarbonWallpaper from '../images/altered-carbon-wallpaper.jpg'
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { firebaseDb } from "../firebase";
 
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Divider from '@mui/material/Divider'
+import Typography from "@mui/material/Typography";
+
 
 const HomePage = () => {
     const [searchParams] = useSearchParams()
@@ -24,14 +25,10 @@ const HomePage = () => {
 
     useEffect(() => {
         const fetchArticles = async () => {
-            const querySnapshot = await getDocs(collection(firebaseDb, "articles"),)
+            const q = query(collection(firebaseDb, "articles"), orderBy("date_created", 'desc'), limit(3));
+            const querySnapshot = await getDocs(q)
             const data = []
-            // let i = 0
             querySnapshot.forEach((doc) => {
-                // i += 1
-                // if (i > 3) {
-                //     return
-                // }
                 const docData = doc.data()
                 data.push({
                     id: doc.id,
@@ -65,12 +62,12 @@ const HomePage = () => {
 
         if (searchParams.get('newuser') === 'true') {
             navigate('/')
-            navigate(0)
+            // navigate(0)
         }
 
         fetchArticles().then(r => console.log('Articles loaded'))
         fetchQuestions().then(r => console.log('Questions loaded'))
-    }, [])
+    }, [navigate, searchParams])
 
     return (
         <Stack spacing={0} direction='column'
