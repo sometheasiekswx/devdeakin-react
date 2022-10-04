@@ -22,6 +22,7 @@ import { alpha, styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
+import { Login, Logout, MessageOutlined, PersonAdd, PostAdd } from '@mui/icons-material'
 
 
 const Search = styled('div')(({theme}) => ({
@@ -51,17 +52,12 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        // [theme.breakpoints.up('sm')]: {
-        //     width: '12ch', '&:focus': {
-        //         width: '20ch',
-        //     },
-        // },
     },
 }))
 
 
 const Header = () => {
-    const user = useFirebaseAuth();
+    const user = useFirebaseAuth()
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const navigate = useNavigate()
@@ -123,24 +119,38 @@ const Header = () => {
                                 }}
                             >
                                 {(user !== null && user !== undefined) &&
-                                    <MenuItem onClick={() => handleCloseNavMenu('/profile')}>
+                                    <MenuItem onClick={() => handleCloseNavMenu('/chat')} sx={{m: 1}}>
                                         <img src={user.photoURL}
-                                             style={{height: 36, marginRight: 12}}
+                                             style={{height: 36, marginRight: 14}}
+                                             loading={'lazy'}
                                         />
                                         <Typography textAlign='center'>{user.displayName}</Typography>
                                     </MenuItem>
                                 }
-                                <MenuItem onClick={() => handleCloseNavMenu('/post')}>
+                                {(user !== null && user !== undefined) &&
+                                    <Divider/>
+                                }
+                                {(user !== null && user !== undefined) &&
+                                    <MenuItem onClick={() => handleCloseNavMenu('/chat')} sx={{m: 1}}>
+                                        <MessageOutlined fontSize={'large'} sx={{mr: 2}}/>
+                                        <Typography textAlign='center'>Chat</Typography>
+                                    </MenuItem>
+                                }
+                                <MenuItem onClick={() => handleCloseNavMenu('/post')} sx={{m: 1}}>
+                                    <PostAdd fontSize={'large'} sx={{mr: 2}}/>
                                     <Typography textAlign='center'>Post</Typography>
                                 </MenuItem>
 
+
                                 {(user === null || user === undefined) &&
-                                    <MenuItem onClick={() => handleCloseNavMenu('/login')}>
+                                    <MenuItem onClick={() => handleCloseNavMenu('/login')} sx={{m: 1}}>
+                                        <Login fontSize={'large'} sx={{mr: 2}}/>
                                         <Typography textAlign='center'>Login</Typography>
                                     </MenuItem>
                                 }
                                 {(user === null || user === undefined) &&
-                                    <MenuItem onClick={() => handleCloseNavMenu('/signup')}>
+                                    <MenuItem onClick={() => handleCloseNavMenu('/signup')} sx={{m: 1}}>
+                                        <PersonAdd fontSize={'large'} sx={{mr: 2}}/>
                                         <Typography textAlign='center'>Sign up</Typography>
                                     </MenuItem>
                                 }
@@ -155,7 +165,9 @@ const Header = () => {
                                         }).catch((error) => {
                                             setError(error.toString())
                                         })}
+                                        sx={{m: 1}}
                                     >
+                                        <Logout fontSize={'large'} sx={{mr: 2}}/>
                                         <Typography textAlign='center'>Logout</Typography>
                                     </MenuItem>
                                 }
@@ -172,7 +184,7 @@ const Header = () => {
                         </Search>
                         <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
                             {(user !== null && user !== undefined) && <>
-                                <Link to={'/profile'}
+                                <Link to={'/chat'}
                                       style={{
                                           marginLeft: 2,
                                           alignItems: 'center',
@@ -181,24 +193,38 @@ const Header = () => {
                                       }}>
                                     <img src={user.photoURL}
                                          style={{height: 36}}
+                                         loading={'lazy'}
                                     />
                                 </Link>
 
                                 <Button
-                                    onClick={() => navigate('/profile')}
+                                    onClick={() => navigate('/chat')}
                                     sx={{mr: 2, color: 'white', display: 'block', whiteSpace: 'nowrap'}}
                                 >
                                     {user.displayName}
                                 </Button>
                             </>}
                         </Box>
-                        <Divider orientation='vertical' flexItem
-                                 sx={{backgroundColor: 'white', display: {xs: 'none', md: 'flex'}}}/>
+                        {(user !== null && user !== undefined) &&
+                            <Divider orientation='vertical' flexItem
+                                     sx={{backgroundColor: 'white', display: {xs: 'none', md: 'flex'}}}/>
+                        }
                         <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
+                            {(user !== null && user !== undefined) &&
+                                <Button
+                                    onClick={() => navigate('/chat')}
+                                    sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
+                                    variant={'contained'}
+                                    startIcon={<MessageOutlined/>}
+                                >
+                                    Chat
+                                </Button>
+                            }
                             <Button
                                 onClick={() => navigate('/post')}
-                                sx={{ml: 2, color: 'white', display: 'block'}}
+                                sx={{ml: 2, color: 'white',}}
                                 variant={'contained'}
+                                startIcon={<PostAdd/>}
                             >
                                 Post
                             </Button>
@@ -206,16 +232,18 @@ const Header = () => {
                                 <>
                                     <Button
                                         onClick={() => navigate('/login')}
-                                        sx={{ml: 2, color: 'white', display: 'block'}}
+                                        sx={{ml: 2, color: 'white',}}
                                         variant={'contained'}
+                                        startIcon={<Login/>}
                                     >
                                         Login
                                     </Button>
                                     <Button
                                         onClick={() => navigate('/signup')}
-                                        sx={{ml: 2, color: 'white', display: 'block', whiteSpace: 'nowrap'}}
+                                        sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
                                         variant={'contained'}
                                         color={'secondary'}
+                                        startIcon={<PersonAdd/>}
                                     >
                                         Sign up
                                     </Button>
@@ -232,7 +260,8 @@ const Header = () => {
                                 })}
                                 variant={'contained'}
                                 color={'secondary'}
-                                sx={{ml: 2, color: 'white', display: 'block'}}
+                                sx={{ml: 2, color: 'white',}}
+                                startIcon={<Logout/>}
                             >
                                 Logout
                             </Button>}

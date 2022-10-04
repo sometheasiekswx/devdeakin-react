@@ -15,9 +15,9 @@ const data = [
         href: '/explore',
         items: [
             {title: 'Home', href: '/'},
+            {title: 'Chat', href: '/chat'},
             {title: 'Questions', href: '/questions'},
             {title: 'Articles', href: '/articles'},
-            {title: 'Tutorials', href: '/tutorials'},
         ]
     },
     {
