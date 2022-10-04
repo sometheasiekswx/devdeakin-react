@@ -106,7 +106,7 @@ const QuestionPage = () => {
                                                     sx={{
                                                         fontSize: {xs: '1.2rem', md: '1.4rem'},
                                                         p: 2,
-                                                        fontWeight: 500,
+                                                        fontWeight: 400,
                                                     }}
                                         >
                                             {question.problem}

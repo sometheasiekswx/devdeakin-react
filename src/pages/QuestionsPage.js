@@ -61,13 +61,15 @@ const QuestionsPage = () => {
                                 href='/'
                                 sx={{
                                     my: 0,
-                                    py: 2,
+                                    p: 2,
                                     textAlign: 'center',
                                     fontFamily: 'monospace',
                                     fontWeight: 500,
                                     letterSpacing: '.1rem',
                                     color: 'white',
                                     textDecoration: 'none',
+                                    whiteSpace: 'nowrap',
+                                    backgroundColor: 'primary.main',
                                 }}
                             >
                                 <TypeAnimation

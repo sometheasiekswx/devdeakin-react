@@ -85,10 +85,14 @@ const FeaturedCards = (props) => {
                                                      sx={{backgroundColor: 'primary.main'}}/>
                                             <Typography variant='body2' color='text.secondary'>
                                                 {d.tags.map((tag, i) => {
+                                                        let tagDisplayed = tag
+                                                        if (tag.length > 10) {
+                                                            tagDisplayed = tag.slice(0, 10)
+                                                        }
                                                         if (i < d.tags.length - 1) {
-                                                            return `${tag},`
+                                                            return `${tagDisplayed},`
                                                         } else {
-                                                            return tag
+                                                            return tagDisplayed
                                                         }
                                                     }
                                                 )}
@@ -104,7 +108,8 @@ const FeaturedCards = (props) => {
                                       justifyContent='space-between'
                                       alignItems='center' gap={1}>
                                     <Grid item xs={5}>
-                                        <Button variant={'contained'} fullWidth onClick={()=>navigate(`/questions/${d.id}`)}>Read</Button>
+                                        <Button variant={'contained'} fullWidth
+                                                onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
                                     </Grid>
                                     <Grid item xs={3}>
                                         <Button variant={'outlined'} fullWidth>Edit</Button>

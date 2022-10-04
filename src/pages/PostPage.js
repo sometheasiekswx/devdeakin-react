@@ -22,6 +22,10 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+// import {UnControlled} from 'react-codemirror2'
+//
+// import {Controlled} from 'react-codemirror2'
+
 
 const HomePage = () => {
     const user = useFirebaseAuth();
@@ -213,6 +217,26 @@ const HomePage = () => {
                             What do you want to ask or share
                         </Typography>
                     </Box>
+                    {/*<UnControlled*/}
+                    {/*    value='<h1>I ♥ react-codemirror2</h1>'*/}
+                    {/*    options={{*/}
+                    {/*        mode: 'xml',*/}
+                    {/*        theme: 'material',*/}
+                    {/*        lineNumbers: true*/}
+                    {/*    }}*/}
+                    {/*    onChange={(editor, data, value) => {*/}
+                    {/*    }}*/}
+                    {/*/>*/}
+
+                    {/*<Controlled*/}
+                    {/*    value={this.state.value}*/}
+                    {/*    // options={options}*/}
+                    {/*    onBeforeChange={(editor, data, value) => {*/}
+                    {/*        this.setState({value});*/}
+                    {/*    }}*/}
+                    {/*    onChange={(editor, data, value) => {*/}
+                    {/*    }}*/}
+                    {/*/>*/}
                     <Box sx={{
                         backgroundColor: 'white',
                         width: {xs: '100%'},
