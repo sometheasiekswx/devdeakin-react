@@ -30,13 +30,11 @@ const HomePage = () => {
             const data = []
             querySnapshot.forEach((doc) => {
                 const docData = doc.data()
+                //TODO: Remove duplicated abstract field
                 data.push({
                     id: doc.id,
-                    title: docData['title'],
-                    image: docData['image'],
                     description: docData['abstract'],
-                    tags: docData['tags'],
-                    author: docData['author'],
+                    ...docData
                 })
             });
             setArticles(data);
@@ -48,13 +46,11 @@ const HomePage = () => {
             const data = []
             querySnapshot.forEach((doc, index) => {
                 const docData = doc.data()
+                //TODO: Remove duplicated problem field
                 data.push({
                     id: doc.id,
-                    title: docData['title'],
-                    image: docData['image'],
                     description: docData['problem'],
-                    tags: docData['tags'],
-                    author: docData['author'],
+                    ...docData
                 })
             });
             setQuestions(data);

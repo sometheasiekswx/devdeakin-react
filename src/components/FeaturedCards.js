@@ -1,4 +1,10 @@
 import React from 'react'
+
+import { useNavigate } from 'react-router-dom'
+
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
+
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -6,13 +12,14 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-
-import { useNavigate } from 'react-router-dom'
 import Stack from '@mui/material/Stack'
 import Divider from "@mui/material/Divider";
 
+import { useFirebaseAuth } from "../firebase";
+
 
 const FeaturedCards = (props) => {
+    const user = useFirebaseAuth()
     const navigate = useNavigate()
     const {title, link, data} = props
 
@@ -66,10 +73,19 @@ const FeaturedCards = (props) => {
                                 }}>
                                     {d.title}
                                 </Typography>
-                                <Typography variant='body2' color='text.secondary'>
-                                    {d.description.length < 75 ? d.description : `${d.description.slice(0, 75)}...`}
-                                </Typography>
-
+                                <MDEditor.Markdown
+                                    style={{
+                                        // fontSize: '1.2rem',
+                                        // padding: '16px',
+                                        fontWeight: 400,
+                                        fontFamily: 'Montserrat',
+                                    }}
+                                    source={d.description.length < 75 ? d.description : `${d.description.slice(0, 75)}...`}
+                                    linkTarget="_blank"
+                                    previewOptions={{
+                                        rehypePlugins: [[rehypeSanitize]],
+                                    }}
+                                />
                                 <Grid container
                                       sx={{mt: 2}}
                                       justifyContent='center'
@@ -107,16 +123,26 @@ const FeaturedCards = (props) => {
                                       sx={{mt: 2}}
                                       justifyContent='space-between'
                                       alignItems='center' gap={1}>
-                                    <Grid item xs={5}>
-                                        <Button variant={'contained'} fullWidth
-                                                onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Button variant={'outlined'} fullWidth>Edit</Button>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Button variant={'outlined'} color={'secondary'} fullWidth>Delete</Button>
-                                    </Grid>
+
+                                    {user !== null && user !== undefined && d.author_id === user.uid ?
+                                        <>
+                                            <Grid item xs={5}>
+                                                <Button variant={'contained'} fullWidth
+                                                        onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant={'outlined'} fullWidth>Edit</Button>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant={'outlined'} color={'secondary'}
+                                                        fullWidth>Delete</Button>
+                                            </Grid>
+                                        </> :
+                                        <Grid item xs={12}>
+                                            <Button variant={'contained'} fullWidth
+                                                    onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
+                                        </Grid>
+                                    }
                                 </Grid>
                             </CardContent>
                         </Card>

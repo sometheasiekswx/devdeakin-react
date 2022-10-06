@@ -1,49 +1,46 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { firebaseDb } from "../firebase";
-import { collection, deleteDoc, doc, documentId, getDocs, query, where } from "firebase/firestore";
+import { firebaseDb, useFirebaseAuth } from '../firebase'
+import { collection, deleteDoc, doc, documentId, getDocs, query, where } from 'firebase/firestore'
 
 import Stack from '@mui/material/Stack'
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import { ArrowBack } from "@mui/icons-material";
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import Grid from '@mui/material/Grid'
+import Card from '@mui/material/Card'
+import CardMedia from '@mui/material/CardMedia'
+import CardContent from '@mui/material/CardContent'
+import Button from '@mui/material/Button'
+import { ArrowBack } from '@mui/icons-material'
+import MDEditor from '@uiw/react-md-editor'
+import rehypeSanitize from 'rehype-sanitize'
 
 
 const QuestionPage = () => {
+    const user = useFirebaseAuth()
     const navigate = useNavigate()
-    const {questionId} = useParams();
-    const [question, setQuestion] = useState({});
+    const {questionId} = useParams()
+    const [question, setQuestion] = useState({})
 
     useEffect(() => {
         const fetchData = async () => {
             const q = query(
-                collection(firebaseDb, "questions",),
+                collection(firebaseDb, 'questions',),
                 where(documentId(), '==', questionId)
-            );
+            )
             const querySnapshot = await getDocs(q)
             let data = {}
             querySnapshot.forEach((doc) => {
                 const docData = doc.data()
                 data = {
                     id: doc.id,
-                    title: docData['title'],
-                    image: docData['image'],
-                    problem: docData['problem'],
-                    tags: docData['tags'],
-                    author: docData['author'],
-                    date_created: new Date(docData['date_created']),
-                    date_updated: new Date(docData['date_updated']),
+                    ...docData
                 }
             })
 
-            setQuestion(data);
+            setQuestion(data)
         }
 
         fetchData()
@@ -102,15 +99,19 @@ const QuestionPage = () => {
                                         />
                                     }
                                     <CardContent>
-                                        <Typography variant='body1'
-                                                    sx={{
-                                                        fontSize: {xs: '1.2rem', md: '1.4rem'},
-                                                        p: 2,
-                                                        fontWeight: 400,
-                                                    }}
-                                        >
-                                            {question.problem}
-                                        </Typography>
+                                        <MDEditor.Markdown
+                                            style={{
+                                                fontSize: '1.2rem',
+                                                padding: '16px',
+                                                fontWeight: 400,
+                                                fontFamily: 'Montserrat',
+                                            }}
+                                            source={question.problem}
+                                            linkTarget='_blank'
+                                            previewOptions={{
+                                                rehypePlugins: [[rehypeSanitize]],
+                                            }}
+                                        />
                                         <Grid container
                                               sx={{p: 2}}
                                               justifyContent='center'
@@ -123,7 +124,7 @@ const QuestionPage = () => {
                                                     <Typography sx={{fontSize: {xs: '1rem', md: '1.25rem'}}}>
                                                         Tags
                                                     </Typography>
-                                                    <Divider orientation="vertical" flexItem
+                                                    <Divider orientation='vertical' flexItem
                                                              sx={{backgroundColor: 'primary.main'}}/>
                                                     <Typography variant='body1' color='text.secondary'
                                                                 sx={{fontSize: {xs: '1rem', md: '1.25rem'}}}>
@@ -148,22 +149,34 @@ const QuestionPage = () => {
                                               sx={{p: 2}}
                                               justifyContent='space-between'
                                               alignItems='center' gap={1}>
-                                            <Grid item xs={5}>
-                                                <Button size={'large'} variant={'contained'} fullWidth
-                                                        onClick={() => navigate(`/questions`)}
-                                                        startIcon={<ArrowBack/>}>Questions</Button>
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Button size={'large'} variant={'outlined'} fullWidth>Edit</Button>
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <Button size={'large'} variant={'outlined'} color={'secondary'}
-                                                        onClick={async () => {
-                                                            await deleteDoc(doc(firebaseDb, 'questions', question.id)).then(
-                                                                navigate(`/questions`)
-                                                            )
-                                                        }} fullWidth>Delete</Button>
-                                            </Grid>
+                                            {user !== null && user !== undefined && question.author_id === user.uid ?
+                                                <>
+                                                    <Grid item xs={5}>
+                                                        <Button size={'large'} variant={'contained'} fullWidth
+                                                                onClick={() => navigate(`/questions`)}
+                                                                startIcon={<ArrowBack/>}>Questions</Button>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <Button size={'large'} variant={'outlined'}
+                                                                fullWidth>Edit</Button>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <Button size={'large'} variant={'outlined'} color={'secondary'}
+                                                                onClick={async () => {
+                                                                    await deleteDoc(doc(firebaseDb, 'questions', question.id)).then(
+                                                                        navigate(`/questions`)
+                                                                    )
+                                                                }} fullWidth>Delete</Button>
+                                                    </Grid>
+
+                                                </> : <Grid item xs={12}>
+                                                    <Button size={'large'} variant={'contained'} fullWidth
+                                                            onClick={() => navigate(`/questions`)}
+                                                            startIcon={<ArrowBack/>}>Questions</Button>
+                                                </Grid>
+                                            }
+
+
                                         </Grid>
                                         <Typography sx={{p: 2, fontSize: {xs: '1rem', md: '1.2rem'}}} variant='body2'
                                                     color='text.secondary'>

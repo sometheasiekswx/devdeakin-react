@@ -15,14 +15,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import MenuItem from '@mui/material/MenuItem';
 
-import { firebaseDb } from "../firebase";
+import { firebaseDb, useFirebaseAuth } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 
 import { filterTags } from "../ulits";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 
 const QuestionsCards = (props) => {
+    const user = useFirebaseAuth()
     const [anchorElNav, setAnchorElNav] = useState(null)
     const {title, data, setData} = props
     const [search, setSearch] = useState('')
@@ -179,10 +182,19 @@ const QuestionsCards = (props) => {
                                 }}>
                                     {d.title}
                                 </Typography>
-                                <Typography variant='body1' color='text.secondary'>
-                                    {d.problem.length < 100 ? d.problem : `${d.problem.slice(0, 100)}...`}
-                                </Typography>
-
+                                <MDEditor.Markdown
+                                    style={{
+                                        // fontSize: '1.2rem',
+                                        // padding: '16px',
+                                        fontWeight: 400,
+                                        fontFamily: 'Montserrat',
+                                    }}
+                                    source={d.problem.length < 200 ? d.problem : `${d.problem.slice(0, 200)}...`}
+                                    linkTarget="_blank"
+                                    previewOptions={{
+                                        rehypePlugins: [[rehypeSanitize]],
+                                    }}
+                                />
                                 <Grid container
                                       sx={{mt: 2}}
                                       justifyContent='center'
@@ -221,19 +233,29 @@ const QuestionsCards = (props) => {
                                       sx={{mt: 2}}
                                       justifyContent='space-between'
                                       alignItems='center' gap={1}>
-                                    <Grid item xs={5}>
-                                        <Button variant={'contained'} fullWidth onClick={()=>navigate(`/questions/${d.id}`)}>Read</Button>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Button variant={'outlined'} fullWidth>Edit</Button>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Button variant={'outlined'} color={'secondary'} onClick={async () => {
-                                            await deleteDoc(doc(firebaseDb, 'questions', d.id)).then(
-                                                setData((q) => q.filter((_, i) => i !== index))
-                                            )
-                                        }} fullWidth>Delete</Button>
-                                    </Grid>
+
+                                    {user !== null && user !== undefined && d.author_id === user.uid ?
+                                        <>
+                                            <Grid item xs={5}>
+                                                <Button variant={'contained'} fullWidth
+                                                        onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant={'outlined'} fullWidth>Edit</Button>
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                <Button variant={'outlined'} color={'secondary'} onClick={async () => {
+                                                    await deleteDoc(doc(firebaseDb, 'questions', d.id)).then(
+                                                        setData((q) => q.filter((_, i) => i !== index))
+                                                    )
+                                                }} fullWidth>Delete</Button>
+                                            </Grid>
+                                        </> :
+                                        <Grid item xs={12}>
+                                            <Button variant={'contained'} fullWidth
+                                                    onClick={() => navigate(`/questions/${d.id}`)}>Read</Button>
+                                        </Grid>
+                                    }
                                 </Grid>
 
                                 <Typography sx={{mt: 2}} variant='body2' color='text.secondary'>
@@ -242,7 +264,7 @@ const QuestionsCards = (props) => {
                             </CardContent>
                         </Card>
                     </Grid>
-                    ))}
+                ))}
 
             </Grid>
         </Box>)

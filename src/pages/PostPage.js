@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
+
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 
 import CircularProgressWithLabel from "../components/CircularProgressWithLabel";
 
@@ -22,15 +25,12 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
-// import {UnControlled} from 'react-codemirror2'
-//
-// import {Controlled} from 'react-codemirror2'
-
 
 const HomePage = () => {
     const user = useFirebaseAuth();
     const navigate = useNavigate()
     const {handleSubmit, control, formState: {errors}} = useForm()
+    const [code, setCode] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const [postType, setPostType] = useState('question')
@@ -43,9 +43,13 @@ const HomePage = () => {
         setPostType(event.target.value)
     }
 
-    function handleChangeUpload(event) {
+    const handleChangeUpload = (event) => {
         setFile(event.target.files[0]);
     }
+
+    const onChangeCodeMirror = useCallback((value, viewUpdate) => {
+        setCode(value)
+    }, []);
 
     const controlProps = (item) => ({
         checked: postType === item,
@@ -94,6 +98,7 @@ const HomePage = () => {
                     'image': fileUrl,
                     'tags': data.tags.split(','),
                     'author': author,
+                    'author_id': user.uid,
                     'date_created': (new Date()).toJSON(),
                     'date_updated': (new Date()).toJSON(),
                 });
@@ -110,10 +115,11 @@ const HomePage = () => {
             try {
                 const docRef = await addDoc(collection(firebaseDb, "questions"), {
                     'title': data.title,
-                    'problem': data.problem,
+                    'problem': code,
                     'image': fileUrl,
                     'tags': data.tags.split(','),
                     'author': author,
+                    'author_id': user.uid,
                     'date_created': (new Date()).toJSON(),
                     'date_updated': (new Date()).toJSON(),
                 });
@@ -217,26 +223,6 @@ const HomePage = () => {
                             What do you want to ask or share
                         </Typography>
                     </Box>
-                    {/*<UnControlled*/}
-                    {/*    value='<h1>I ♥ react-codemirror2</h1>'*/}
-                    {/*    options={{*/}
-                    {/*        mode: 'xml',*/}
-                    {/*        theme: 'material',*/}
-                    {/*        lineNumbers: true*/}
-                    {/*    }}*/}
-                    {/*    onChange={(editor, data, value) => {*/}
-                    {/*    }}*/}
-                    {/*/>*/}
-
-                    {/*<Controlled*/}
-                    {/*    value={this.state.value}*/}
-                    {/*    // options={options}*/}
-                    {/*    onBeforeChange={(editor, data, value) => {*/}
-                    {/*        this.setState({value});*/}
-                    {/*    }}*/}
-                    {/*    onChange={(editor, data, value) => {*/}
-                    {/*    }}*/}
-                    {/*/>*/}
                     <Box sx={{
                         backgroundColor: 'white',
                         width: {xs: '100%'},
@@ -297,7 +283,6 @@ const HomePage = () => {
                             Add an image
                         </Typography>
                         <TextField
-                            // fullWidth
                             variant="filled"
                             type="file" onChange={handleChangeUpload} accept="/image/*"
                         />
@@ -319,20 +304,12 @@ const HomePage = () => {
                                 >
                                     Describe your problem
                                 </Typography>
-                                <Controller
-                                    name='problem'
-                                    defaultValue={''}
-                                    control={control}
-                                    rules={{required: true}}
-                                    render={({field}) =>
-                                        <TextField
-                                            sx={{mt: 2,}}
-                                            fullWidth
-                                            multiline
-                                            rows={12}
-                                            {...field}
-                                        />
-                                    }
+                                <MDEditor
+                                    style={{marginTop: '16px'}}
+                                    height={200} value={code} onChange={setCode}
+                                    previewOptions={{
+                                        rehypePlugins: [[rehypeSanitize]],
+                                    }}
                                 />
                             </Box>
                         </>

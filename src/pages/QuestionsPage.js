@@ -25,13 +25,7 @@ const QuestionsPage = () => {
                 const docData = doc.data()
                 data.push({
                     id: doc.id,
-                    title: docData['title'],
-                    image: docData['image'],
-                    problem: docData['problem'],
-                    tags: docData['tags'],
-                    author: docData['author'],
-                    date_created: new Date(docData['date_created']),
-                    date_updated: new Date(docData['date_updated']),
+                    ...docData
                 })
             })
 
