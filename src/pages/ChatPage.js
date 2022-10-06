@@ -6,22 +6,24 @@ import wallpaper from '../images/wallpaperflare.com_wallpaper.jpg'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
-import { useNavigate, useParams } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import { addDoc, collection, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { firebaseDb, useFirebaseAuth, } from "../firebase";
-import Button from "@mui/material/Button";
-import { Controller, useForm } from "react-hook-form";
-import ChatMessage from "../components/ChatMessage";
+import { useNavigate, useParams } from "react-router-dom"
+import TextField from "@mui/material/TextField"
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore"
+import { firebaseDb, useFirebaseAuth, } from "../firebase"
+import Button from "@mui/material/Button"
+import { Controller, useForm } from "react-hook-form"
+import ChatMessage from "../components/ChatMessage"
+import { ArrowBack } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 
 
 const ChatPage = () => {
-    const user = useFirebaseAuth();
+    const user = useFirebaseAuth()
     const navigate = useNavigate()
     const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
-    const {handleSubmit, control, formState: {errors}} = useForm()
-    const {chatId} = useParams();
+    const [success, setSuccess] = useState(0)
+    const {handleSubmit, control, reset, formState: {errors}} = useForm()
+    const {chatId} = useParams()
 
     const [searchGroupChats, setSearchGroupChats] = useState('')
     const [groupChat, setGroupChat] = useState([])
@@ -38,7 +40,7 @@ const ChatPage = () => {
         }
 
         try {
-            const docRef = doc(firebaseDb, "group-chats", chatId);
+            const docRef = doc(firebaseDb, "group-chats", chatId)
             await updateDoc(docRef, {
                 messages: arrayUnion({
                     text: data.message,
@@ -48,9 +50,9 @@ const ChatPage = () => {
                     date_created: (new Date()).toJSON(),
                     date_updated: (new Date()).toJSON(),
                 })
-            });
-            setSuccess('Message sent')
-            setError('')
+            })
+            setSuccess(success + 1)
+            reset()
         } catch (e) {
             setError(`Error: ${e}`)
         }
@@ -58,7 +60,7 @@ const ChatPage = () => {
 
     useEffect(() => {
         const fetchGroupChats = async () => {
-            const docRef = doc(firebaseDb, "group-chats", chatId);
+            const docRef = doc(firebaseDb, "group-chats", chatId)
             const docSnap = await getDoc(docRef)
             setGroupChat(docSnap.data())
         }
@@ -82,15 +84,17 @@ const ChatPage = () => {
                 </Parallax>
             </Box>
 
-            {console.log(user.uid)}
-
             <Stack spacing={0} direction='column'
                    justifyContent='center'
                    alignItems='center' sx={{m: 4, border: 2, borderColor: 'primary.main', backgroundColor: 'white'}}>
-                <Box sx={{
+                <Stack sx={{
                     backgroundColor: 'primary.main',
                     width: {xs: '100%'},
-                }}>
+                }}
+                       direction="row"
+                       justifyContent="space-between"
+                       alignItems="center"
+                >
                     <Typography
                         variant='h6'
                         component={'h6'}
@@ -106,55 +110,44 @@ const ChatPage = () => {
                             letterSpacing: '.1rem',
                             color: 'white',
                             textDecoration: 'none',
+                            whiteSpace: 'nowrap'
                         }}
                     >
                         {groupChat.title}
                     </Typography>
-                </Box>
+                    <Button size={'large'} variant={'outlined'} sx={{
+                        color: 'white', borderColor: 'white', '&:hover': {
+                            borderColor: grey[500],
+                            color: grey[500],
+                        },
+                        m: 2
+                    }}
+                            onClick={() => navigate(`/chat`)}
+                            startIcon={<ArrowBack/>}>Return to chats</Button>
+                </Stack>
 
-                <Box width={'100%'} height={'100%'}>
-                    {console.log(groupChat.messages)}
-                    {groupChat.messages?.map((message)=>{
+                <Box width={'100%'} height={'500px'} sx={{overflowY:'scroll'}}>
+                    {groupChat.messages?.map((message, i) => {
+                        {
+                            console.log(message)
+                        }
                         if (message.authorId === user.uid) {
                             return (
                                 <ChatMessage
+                                    key={`${i}-user`}
                                     side={'right'}
                                     messages={[message.text]}
                                 />
                             )
                         }
                         return (
-
                             <ChatMessage
+                                key={`${i}-other`}
                                 avatar={message.image}
                                 messages={[message.text]}
                             />
                         )
                     })}
-                    {/*<ChatMessage*/}
-                    {/*    avatar={''}*/}
-                    {/*    messages={[*/}
-                    {/*        'Hi Jenny, How r u today?',*/}
-                    {/*        'Did you train yesterday',*/}
-                    {/*        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Volutpat lacus laoreet non curabitur gravida.',*/}
-                    {/*    ]}*/}
-                    {/*/>*/}
-                    {/*<ChatMessage*/}
-                    {/*    side={'right'}*/}
-                    {/*    messages={[*/}
-                    {/*        "Great! What's about you?",*/}
-                    {/*        'Of course I did. Speaking of which check this out',*/}
-                    {/*    ]}*/}
-                    {/*/>*/}
-                    {/*<ChatMessage avatar={''} messages={['Im good.', 'See u later.']}/>*/}
-                    {/*<ChatMessage*/}
-                    {/*    side={'right'}*/}
-                    {/*    messages={[*/}
-                    {/*        "Great! What's about you?",*/}
-                    {/*        'Of course I did. Speaking of which check this out',*/}
-                    {/*    ]}*/}
-                    {/*/>*/}
-                    {/*<ChatMessage avatar={''} messages={['Im good.', 'See u later.']}/>*/}
                 </Box>
 
                 <form onSubmit={handleSubmit(onSubmit)} style={{width: '100%'}}>

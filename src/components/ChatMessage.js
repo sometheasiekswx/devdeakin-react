@@ -1,14 +1,15 @@
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import Avatar from '@mui/material/Avatar';
+import React from 'react'
+
+import Grid from '@mui/material/Grid'
+import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import { useTheme } from "@mui/material/styles";
-import { grey } from '@mui/material/colors';
-import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles"
+import { grey } from '@mui/material/colors'
+import Box from "@mui/material/Box"
 
 
 const ChatMessage = (props) => {
-    const theme = useTheme();
+    const theme = useTheme()
 
     const {
         avatar,
@@ -18,11 +19,10 @@ const ChatMessage = (props) => {
         GridItemProps,
         AvatarProps,
         getTypographyProps,
-    } = props;
+    } = props
     return (
         <Grid
             container
-            // spacing={2}
             display='flex'
             justifyContent='flex-start'
             alignItems='center'
@@ -45,7 +45,7 @@ const ChatMessage = (props) => {
             )}
             <Grid item xs={(side === 'right' ? 12 : 10)} sx={{m: 2}}>
                 {messages.map((msg, i) => {
-                    const TypographyProps = getTypographyProps(msg, i, props);
+                    const TypographyProps = getTypographyProps(msg, i, props)
                     return (
                         <Box
                             key={msg.id || i}
@@ -76,12 +76,12 @@ const ChatMessage = (props) => {
                                 {msg}
                             </Typography>
                         </Box>
-                    );
+                    )
                 })}
             </Grid>
         </Grid>
-    );
-};
+    )
+}
 
 ChatMessage.defaultProps = {
     avatar: '',
@@ -91,5 +91,5 @@ ChatMessage.defaultProps = {
     GridItemProps: {},
     AvatarProps: {},
     getTypographyProps: () => ({}),
-};
-export default ChatMessage;
+}
+export default ChatMessage

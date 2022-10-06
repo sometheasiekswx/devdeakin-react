@@ -155,60 +155,58 @@ const ChatsPageContent = (props) => {
                     </Grid>
                 ))}
             </Grid>
-
-            <Box sx={{
-                width: {xs: '100%'},
-                py: 4,
-                px: 2,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
-                <Paper
-                    component="form"
-                    sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: {xs: '100%', md: '50%'}}}
-                >
-                    <IconButton type="button" sx={{p: '10px'}} aria-label="search">
-                        <SearchIcon/>
-                    </IconButton>
-                    <InputBase
-                        onChange={e => setSearchGroupChats(e.target.value)}
-                        value={searchGroupChats}
-                        sx={{mx: 1, flex: 1}}
-                        placeholder="Search users"
-                        inputProps={{'aria-label': 'search groups'}}
-                    />
-                </Paper>
-            </Box>
-            <Typography
-                variant='h4'
-                component={'h4'}
-                href='/'
-                sx={{
-                    my: 0,
-                    py: 2,
-                    textAlign: 'center',
-                    fontFamily: 'monospace',
-                    fontWeight: 500,
-                    letterSpacing: '.1rem',
-                    color: 'white',
-                    textDecoration: 'none',
-                }}
-            >
-                Private Messaging
-            </Typography>
-            <Grid
-                container
-                sx={{pb: 4, width: {xs: '100%'}, pl: 2, pt: 2}}
-                direction='row'
-                justifyContent='center'
-                alignItems='center'
-                rowSpacing={{xs: 4}}
-                columnSpacing={{xs: 2, md: 4}}
-            >
-                <p>Users go here using admin sdk</p>
-            </Grid>
-
+            {/*<Box sx={{*/}
+            {/*    width: {xs: '100%'},*/}
+            {/*    py: 4,*/}
+            {/*    px: 2,*/}
+            {/*    display: 'flex',*/}
+            {/*    justifyContent: 'center',*/}
+            {/*    alignItems: 'center',*/}
+            {/*}}>*/}
+            {/*    <Paper*/}
+            {/*        component="form"*/}
+            {/*        sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: {xs: '100%', md: '50%'}}}*/}
+            {/*    >*/}
+            {/*        <IconButton type="button" sx={{p: '10px'}} aria-label="search">*/}
+            {/*            <SearchIcon/>*/}
+            {/*        </IconButton>*/}
+            {/*        <InputBase*/}
+            {/*            onChange={e => setSearchGroupChats(e.target.value)}*/}
+            {/*            value={searchGroupChats}*/}
+            {/*            sx={{mx: 1, flex: 1}}*/}
+            {/*            placeholder="Search users"*/}
+            {/*            inputProps={{'aria-label': 'search groups'}}*/}
+            {/*        />*/}
+            {/*    </Paper>*/}
+            {/*</Box>*/}
+            {/*<Typography*/}
+            {/*    variant='h4'*/}
+            {/*    component={'h4'}*/}
+            {/*    href='/'*/}
+            {/*    sx={{*/}
+            {/*        my: 0,*/}
+            {/*        py: 2,*/}
+            {/*        textAlign: 'center',*/}
+            {/*        fontFamily: 'monospace',*/}
+            {/*        fontWeight: 500,*/}
+            {/*        letterSpacing: '.1rem',*/}
+            {/*        color: 'white',*/}
+            {/*        textDecoration: 'none',*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    Private Messaging*/}
+            {/*</Typography>*/}
+            {/*<Grid*/}
+            {/*    container*/}
+            {/*    sx={{pb: 4, width: {xs: '100%'}, pl: 2, pt: 2}}*/}
+            {/*    direction='row'*/}
+            {/*    justifyContent='center'*/}
+            {/*    alignItems='center'*/}
+            {/*    rowSpacing={{xs: 4}}*/}
+            {/*    columnSpacing={{xs: 2, md: 4}}*/}
+            {/*>*/}
+            {/*    <p>Users go here using admin sdk</p>*/}
+            {/*</Grid>*/}
         </Box>)
 }
 

@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Controller, useForm } from 'react-hook-form'
 
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
+import MDEditor from '@uiw/react-md-editor'
+import rehypeSanitize from 'rehype-sanitize'
 
-import CircularProgressWithLabel from "../components/CircularProgressWithLabel";
+import CircularProgressWithLabel from '../components/CircularProgressWithLabel'
 
-import { addDoc, collection } from "firebase/firestore";
-import { firebaseDb, firebaseStorage, useFirebaseAuth } from "../firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { addDoc, collection } from 'firebase/firestore'
+import { firebaseDb, firebaseStorage, useFirebaseAuth } from '../firebase'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 
-import ErrorBox from "../components/ErrorBox";
-import SuccessBox from "../components/SuccessBox";
+import ErrorBox from '../components/ErrorBox'
+import SuccessBox from '../components/SuccessBox'
 
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -27,16 +27,16 @@ import Button from '@mui/material/Button'
 
 
 const HomePage = () => {
-    const user = useFirebaseAuth();
+    const user = useFirebaseAuth()
     const navigate = useNavigate()
     const {handleSubmit, control, formState: {errors}} = useForm()
     const [code, setCode] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
     const [postType, setPostType] = useState('question')
-    const [file, setFile] = useState("");
+    const [file, setFile] = useState('')
     const [fileUrl, setFileUrl] = useState('')
-    const [fileUploadPercent, setFileUploadPercent] = useState(0);
+    const [fileUploadPercent, setFileUploadPercent] = useState(0)
     const [postTitlePlaceholder, setPostTitlePlaceholder] = useState('Start your question with how, what, why, etc.')
 
     const handleChangePostType = (event) => {
@@ -44,12 +44,8 @@ const HomePage = () => {
     }
 
     const handleChangeUpload = (event) => {
-        setFile(event.target.files[0]);
+        setFile(event.target.files[0])
     }
-
-    const onChangeCodeMirror = useCallback((value, viewUpdate) => {
-        setCode(value)
-    }, []);
 
     const controlProps = (item) => ({
         checked: postType === item,
@@ -63,35 +59,35 @@ const HomePage = () => {
         if (!file) {
             setError('Browse an image before uploading')
         } else if (file) {
-            const storageRef = ref(firebaseStorage, `/images/${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const storageRef = ref(firebaseStorage, `/images/${file.name}`)
+            const uploadTask = uploadBytesResumable(storageRef, file)
             uploadTask.on(
-                "state_changed",
+                'state_changed',
                 (snapshot) => {
                     const percent = Math.round(
                         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    setFileUploadPercent(percent);
+                    )
+                    setFileUploadPercent(percent)
                 },
                 (err) => setError(err.toString()),
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        setFileUrl(url);
+                        setFileUrl(url)
                         setError('')
-                    });
+                    })
                 }
-            );
+            )
         }
-    };
+    }
 
     const onSubmit = async data => {
-        let author = "Anonymous"
+        let author = 'Anonymous'
         if (user !== null && user !== undefined) {
             author = user.displayName
         }
         if (postType === 'article') {
             try {
-                const docRef = await addDoc(collection(firebaseDb, "articles"), {
+                const docRef = await addDoc(collection(firebaseDb, 'articles'), {
                     'title': data.title,
                     'abstract': data.abstract,
                     'text': data.text,
@@ -101,7 +97,7 @@ const HomePage = () => {
                     'author_id': user.uid,
                     'date_created': (new Date()).toJSON(),
                     'date_updated': (new Date()).toJSON(),
-                });
+                })
                 setError('')
                 setSuccess('Successfully created article')
 
@@ -113,7 +109,7 @@ const HomePage = () => {
             }
         } else if (postType === 'question') {
             try {
-                const docRef = await addDoc(collection(firebaseDb, "questions"), {
+                const docRef = await addDoc(collection(firebaseDb, 'questions'), {
                     'title': data.title,
                     'problem': code,
                     'image': fileUrl,
@@ -122,7 +118,7 @@ const HomePage = () => {
                     'author_id': user.uid,
                     'date_created': (new Date()).toJSON(),
                     'date_updated': (new Date()).toJSON(),
-                });
+                })
                 setError('')
                 setSuccess('Successfully created question')
 
@@ -283,10 +279,10 @@ const HomePage = () => {
                             Add an image
                         </Typography>
                         <TextField
-                            variant="filled"
-                            type="file" onChange={handleChangeUpload} accept="/image/*"
+                            variant='filled'
+                            type='file' onChange={handleChangeUpload} accept='/image/*'
                         />
-                        <Button size={'medium'} onClick={handleUpload} variant="contained">Upload</Button>
+                        <Button size={'medium'} onClick={handleUpload} variant='contained'>Upload</Button>
                         <CircularProgressWithLabel value={fileUploadPercent}/>
                     </Box>
 

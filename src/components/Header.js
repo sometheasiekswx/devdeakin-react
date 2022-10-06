@@ -22,6 +22,7 @@ import { alpha, styled } from '@mui/material/styles'
 import SearchIcon from '@mui/icons-material/Search'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Login, Logout, MessageOutlined, PersonAdd, PostAdd } from '@mui/icons-material'
 
 
@@ -130,6 +131,10 @@ const Header = () => {
                                 {(user !== null && user !== undefined) &&
                                     <Divider/>
                                 }
+                                <MenuItem onClick={() => handleCloseNavMenu('/plans')} sx={{m: 1}}>
+                                    <AttachMoneyIcon fontSize={'large'} sx={{mr: 2}}/>
+                                    <Typography textAlign='center'>Plans</Typography>
+                                </MenuItem>
                                 {(user !== null && user !== undefined) &&
                                     <MenuItem onClick={() => handleCloseNavMenu('/chat')} sx={{m: 1}}>
                                         <MessageOutlined fontSize={'large'} sx={{mr: 2}}/>
@@ -210,6 +215,15 @@ const Header = () => {
                                      sx={{backgroundColor: 'white', display: {xs: 'none', md: 'flex'}}}/>
                         }
                         <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
+                            <Button
+                                onClick={() => navigate('/plans')}
+                                sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
+                                variant={'contained'}
+                                color={'success'}
+                                startIcon={<AttachMoneyIcon/>}
+                            >
+                                Plans
+                            </Button>
                             {(user !== null && user !== undefined) &&
                                 <Button
                                     onClick={() => navigate('/chat')}
