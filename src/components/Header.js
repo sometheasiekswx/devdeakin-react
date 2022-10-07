@@ -124,27 +124,35 @@ const Header = () => {
                                         <img src={user.photoURL}
                                              style={{height: 36, marginRight: 14}}
                                              loading={'lazy'}
+                                             alt={'User photo that looks like a robot unless they changed it'}
                                         />
                                         <Typography textAlign='center'>{user.displayName}</Typography>
+                                        {user.premiumSubscription &&
+                                            <Typography textAlign='center' sx={{ml: 1, color: 'primary.main'}}>(Premium)</Typography>
+                                        }
                                     </MenuItem>
                                 }
                                 {(user !== null && user !== undefined) &&
                                     <Divider/>
                                 }
-                                <MenuItem onClick={() => handleCloseNavMenu('/plans')} sx={{m: 1}}>
-                                    <AttachMoneyIcon fontSize={'large'} sx={{mr: 2}}/>
-                                    <Typography textAlign='center'>Plans</Typography>
-                                </MenuItem>
+                                {!user?.premiumSubscription &&
+                                    <MenuItem onClick={() => handleCloseNavMenu('/plans')} sx={{m: 1}}>
+                                        <AttachMoneyIcon fontSize={'large'} sx={{mr: 2}}/>
+                                        <Typography textAlign='center'>Plans</Typography>
+                                    </MenuItem>
+                                }
                                 {(user !== null && user !== undefined) &&
                                     <MenuItem onClick={() => handleCloseNavMenu('/chat')} sx={{m: 1}}>
                                         <MessageOutlined fontSize={'large'} sx={{mr: 2}}/>
                                         <Typography textAlign='center'>Chat</Typography>
                                     </MenuItem>
                                 }
-                                <MenuItem onClick={() => handleCloseNavMenu('/post')} sx={{m: 1}}>
-                                    <PostAdd fontSize={'large'} sx={{mr: 2}}/>
-                                    <Typography textAlign='center'>Post</Typography>
-                                </MenuItem>
+                                {(user !== null && user !== undefined) &&
+                                    <MenuItem onClick={() => handleCloseNavMenu('/post')} sx={{m: 1}}>
+                                        <PostAdd fontSize={'large'} sx={{mr: 2}}/>
+                                        <Typography textAlign='center'>Post</Typography>
+                                    </MenuItem>
+                                }
 
 
                                 {(user === null || user === undefined) &&
@@ -188,7 +196,7 @@ const Header = () => {
                             />
                         </Search>
                         <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-                            {(user !== null && user !== undefined) && <>
+                            {user !== null && user !== undefined && <>
                                 <Link to={'/chat'}
                                       style={{
                                           marginLeft: 2,
@@ -199,6 +207,7 @@ const Header = () => {
                                     <img src={user.photoURL}
                                          style={{height: 36}}
                                          loading={'lazy'}
+                                         alt={'User photo that looks like a robot unless they changed it'}
                                     />
                                 </Link>
 
@@ -207,6 +216,7 @@ const Header = () => {
                                     sx={{mr: 2, color: 'white', display: 'block', whiteSpace: 'nowrap'}}
                                 >
                                     {user.displayName}
+                                    {user.premiumSubscription && (" (Premium)")}
                                 </Button>
                             </>}
                         </Box>
@@ -215,33 +225,38 @@ const Header = () => {
                                      sx={{backgroundColor: 'white', display: {xs: 'none', md: 'flex'}}}/>
                         }
                         <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-                            <Button
-                                onClick={() => navigate('/plans')}
-                                sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
-                                variant={'contained'}
-                                color={'success'}
-                                startIcon={<AttachMoneyIcon/>}
-                            >
-                                Plans
-                            </Button>
-                            {(user !== null && user !== undefined) &&
+                            {!user?.premiumSubscription &&
                                 <Button
-                                    onClick={() => navigate('/chat')}
+                                    onClick={() => navigate('/plans')}
                                     sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
                                     variant={'contained'}
-                                    startIcon={<MessageOutlined/>}
+                                    color={'success'}
+                                    startIcon={<AttachMoneyIcon/>}
                                 >
-                                    Chat
+                                    Plans
                                 </Button>
                             }
-                            <Button
-                                onClick={() => navigate('/post')}
-                                sx={{ml: 2, color: 'white',}}
-                                variant={'contained'}
-                                startIcon={<PostAdd/>}
-                            >
-                                Post
-                            </Button>
+
+                            {(user !== null && user !== undefined) &&
+                                <>
+                                    <Button
+                                        onClick={() => navigate('/chat')}
+                                        sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
+                                        variant={'contained'}
+                                        startIcon={<MessageOutlined/>}
+                                    >
+                                        Chat
+                                    </Button>
+                                    <Button
+                                        onClick={() => navigate('/post')}
+                                        sx={{ml: 2, color: 'white',}}
+                                        variant={'contained'}
+                                        startIcon={<PostAdd/>}
+                                    >
+                                        Post
+                                    </Button>
+                                </>
+                            }
                             {(user === null || user === undefined) &&
                                 <>
                                     <Button

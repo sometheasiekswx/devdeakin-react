@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
 
@@ -28,8 +28,26 @@ const FirebaseAuthProvider = ({children}) => {
     const value = {user}
 
     useEffect(() => {
-        onAuthStateChanged(firebaseAuth, (u) => {
+        onAuthStateChanged(firebaseAuth, async (u) => {
             setUser(u)
+            if (u && u.email) {
+                const q = query(
+                    collection(firebaseDb, 'premium-plan-members',),
+                    where('email', '==', u.email)
+                )
+                const querySnapshot = await getDocs(q)
+                let data = {}
+                querySnapshot.forEach((doc) => {
+                    const docData = doc.data()
+                    data = {
+                        id: doc.id,
+                        ...docData
+                    }
+                })
+                if (data && data.subscribed) {
+                    setUser({...u, premiumSubscription: true})
+                }
+            }
         })
     }, [])
 
