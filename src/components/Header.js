@@ -24,6 +24,7 @@ import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Login, Logout, MessageOutlined, PersonAdd, PostAdd } from '@mui/icons-material'
+import PublicIcon from '@mui/icons-material/Public'
 
 
 const Search = styled('div')(({theme}) => ({
@@ -128,23 +129,30 @@ const Header = () => {
                                         />
                                         <Typography textAlign='center'>{user.displayName}</Typography>
                                         {user.premiumSubscription &&
-                                            <Typography textAlign='center' sx={{ml: 1, color: 'primary.main'}}>(Premium)</Typography>
+                                            <Typography textAlign='center'
+                                                        sx={{ml: 1, color: 'primary.main'}}>(Premium)</Typography>
                                         }
                                     </MenuItem>
                                 }
                                 {(user !== null && user !== undefined) &&
                                     <Divider/>
                                 }
-                                {!user?.premiumSubscription &&
-                                    <MenuItem onClick={() => handleCloseNavMenu('/plans')} sx={{m: 1}}>
-                                        <AttachMoneyIcon fontSize={'large'} sx={{mr: 2}}/>
-                                        <Typography textAlign='center'>Plans</Typography>
+                                {(user !== null && user !== undefined) &&
+                                    <MenuItem onClick={() => handleCloseNavMenu('/world')} sx={{m: 1}}>
+                                        <PublicIcon fontSize={'large'} sx={{mr: 2}}/>
+                                        <Typography textAlign='center'>World</Typography>
                                     </MenuItem>
                                 }
                                 {(user !== null && user !== undefined) &&
                                     <MenuItem onClick={() => handleCloseNavMenu('/chat')} sx={{m: 1}}>
                                         <MessageOutlined fontSize={'large'} sx={{mr: 2}}/>
                                         <Typography textAlign='center'>Chat</Typography>
+                                    </MenuItem>
+                                }
+                                {!user?.premiumSubscription &&
+                                    <MenuItem onClick={() => handleCloseNavMenu('/plans')} sx={{m: 1}}>
+                                        <AttachMoneyIcon fontSize={'large'} sx={{mr: 2}}/>
+                                        <Typography textAlign='center'>Plans</Typography>
                                     </MenuItem>
                                 }
                                 {(user !== null && user !== undefined) &&
@@ -239,6 +247,14 @@ const Header = () => {
 
                             {(user !== null && user !== undefined) &&
                                 <>
+                                    <Button
+                                        onClick={() => navigate('/world')}
+                                        sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}
+                                        variant={'contained'}
+                                        startIcon={<PublicIcon/>}
+                                    >
+                                        World
+                                    </Button>
                                     <Button
                                         onClick={() => navigate('/chat')}
                                         sx={{ml: 2, color: 'white', whiteSpace: 'nowrap'}}

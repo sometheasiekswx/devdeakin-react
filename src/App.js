@@ -20,7 +20,7 @@ import ChatPage from './pages/ChatPage'
 import PricingPlansPage from './pages/PricingPlansPage'
 import PricingPlansPremiumSuccessPage from './pages/PricingPlansPremiumSuccessPage'
 import PricingPlansPremiumCancelPage from './pages/PricingPlansPremiumCancelPage'
-// import ArticlesPage from './pages/ArticlesPage'
+import WorldPage from './pages/WorldPage'
 
 
 const theme = createTheme({
@@ -59,6 +59,9 @@ function App() {
                         <Route exact path='/chat' element={<PricingPlansPage/>}/>}
                     {user && user.premiumSubscription ? <Route exact path='/chat/:chatId' element={<ChatPage/>}/> :
                         <Route exact path='/chat/:chatId' element={<PricingPlansPage/>}/>}
+
+                    {user && user.premiumSubscription ? <Route exact path='/world' element={<WorldPage/>}/> :
+                        <Route exact path='/chat' element={<PricingPlansPage/>}/>}
 
                     {user ? <Route exact path='/plans' element={<PricingPlansPage/>}/> :
                         <Route exact path='/plans' element={<LoginPage/>}/>}

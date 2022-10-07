@@ -1,8 +1,8 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 
 export default function CircularProgressWithLabel(props) {
     return (
@@ -20,12 +20,12 @@ export default function CircularProgressWithLabel(props) {
                     justifyContent: 'center',
                 }}
             >
-                <Typography variant="caption" component="div"  color={'primary.main'}>
+                <Typography variant="caption" component="div" color={'primary.main'}>
                     {`${Math.round(props.value)}%`}
                 </Typography>
             </Box>
         </Box>
-    );
+    )
 }
 
 CircularProgressWithLabel.propTypes = {
@@ -35,19 +35,19 @@ CircularProgressWithLabel.propTypes = {
      * @default 0
      */
     value: PropTypes.number.isRequired,
-};
+}
 
 export function CircularStatic() {
-    const [progress, setProgress] = React.useState(10);
+    const [progress, setProgress] = React.useState(10)
 
     React.useEffect(() => {
         const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-        }, 800);
+            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10))
+        }, 800)
         return () => {
-            clearInterval(timer);
-        };
-    }, []);
+            clearInterval(timer)
+        }
+    }, [])
 
-    return <CircularProgressWithLabel value={progress}/>;
+    return <CircularProgressWithLabel value={progress}/>
 }
