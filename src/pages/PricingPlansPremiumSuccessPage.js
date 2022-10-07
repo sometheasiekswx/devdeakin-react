@@ -39,7 +39,7 @@ const PricingPlansPremiumSuccessPage = () => {
                                 newuser: true
                             }).toString()
                         })
-                    }, 500)
+                    }, 300)
                 }
 
                 const result = await checkIfCustomerExists(user.email)
@@ -56,7 +56,7 @@ const PricingPlansPremiumSuccessPage = () => {
                                 newuser: true
                             }).toString()
                         })
-                    }, 500)
+                    }, 300)
                 }
             }
         }
