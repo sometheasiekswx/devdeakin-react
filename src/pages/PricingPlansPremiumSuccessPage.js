@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 
+import { createSearchParams, useNavigate } from 'react-router-dom'
+
 import { firebaseDb, useFirebaseAuth } from '../firebase'
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 
@@ -10,6 +12,7 @@ import Box from '@mui/material/Box'
 
 const PricingPlansPremiumSuccessPage = () => {
     const user = useFirebaseAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,7 +32,14 @@ const PricingPlansPremiumSuccessPage = () => {
                 })
 
                 if (data && data.subscribed) {
-                    return
+                    setTimeout(() => {
+                        navigate({
+                            pathname: '/',
+                            search: createSearchParams({
+                                newuser: true
+                            }).toString()
+                        })
+                    }, 500)
                 }
 
                 const result = await checkIfCustomerExists(user.email)

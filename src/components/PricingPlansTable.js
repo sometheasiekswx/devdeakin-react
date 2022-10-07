@@ -12,20 +12,19 @@ import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 import { grey } from "@mui/material/colors"
 
+
 const freeBenefits = [
-    'Post & view questions',
-    'Post & view articles',
+    'Post & view questions & articles',
     'Delete & edit questions',
     'Delete & edit articles',
 ]
 
 const premuimBenefits = [
-    'Access to chat rooms',
-    'Private message anyone',
+    'Access to multiple chat rooms',
+    'Future Private message anyone',
     'Future customization features like messages and banners, themes, content controls',
     'Future admin and support features like analytics dashboard'
 ]
-
 
 const PricingPlansPage = () => {
     const user = useFirebaseAuth()

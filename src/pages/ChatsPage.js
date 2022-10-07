@@ -4,12 +4,11 @@ import { Parallax } from 'react-parallax'
 
 import wallpaper from '../images/wallpaperflare.com_wallpaper.jpg'
 
-import ChatsPageContent from "../components/ChatsPagesContent";
+import ChatsPageContent from '../components/ChatsPagesContent'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
-import ChatMessage from "../components/ChatMessage";
 
 
 const ChatsPage = () => {

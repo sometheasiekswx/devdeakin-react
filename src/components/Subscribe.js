@@ -5,11 +5,11 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useForm } from "react-hook-form"
 import { postSubscriber } from "../api"
-import SuccessBox from "./SuccessBox";
+import SuccessBox from "./SuccessBox"
 
 
 const Subscribe = () => {
-    const {register, handleSubmit, watch, formState: {errors}} = useForm();
+    const {register, handleSubmit, formState: {errors}} = useForm()
     const [success, setSuccess] = useState('')
 
     const onSubmit = async (data) => {
