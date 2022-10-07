@@ -48,6 +48,15 @@ const PricingPlansPremiumSuccessPage = () => {
                         email: user.email,
                         'subscribed': result.data,
                     })
+
+                    setTimeout(() => {
+                        navigate({
+                            pathname: '/',
+                            search: createSearchParams({
+                                newuser: true
+                            }).toString()
+                        })
+                    }, 500)
                 }
             }
         }
