@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# devdeakin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![DevDeakin](desktop.png)
+
+[Click here for live demo 👈](https://devdeakin.netlify.app/)
 
 ## Available Scripts
 
